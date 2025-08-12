@@ -285,8 +285,6 @@ export const useRoadmapStore = create<RoadmapStore>((set, get) => ({
 
 // Main component
 const RoadmapBoard: React.FC = () => {
-  console.log('🎬 RoadmapBoard component function called');
-  
   const {
     items,
     teams,
@@ -335,12 +333,10 @@ const RoadmapBoard: React.FC = () => {
 
   // Fetch data from Supabase
   const fetchData = useCallback(async () => {
-    console.log('🔄 Starting to fetch data...');
     setLoading(true);
     setError(null);
 
     try {
-      console.log('📡 Fetching teams...');
       // Fetch teams
       const { data: teamsData, error: teamsError } = await supabase
         .from('teams')
@@ -348,9 +344,7 @@ const RoadmapBoard: React.FC = () => {
         .order('name');
 
       if (teamsError) throw teamsError;
-      console.log('✅ Teams fetched:', teamsData);
 
-      console.log('📡 Fetching super domains...');
       // Fetch super domains
       const { data: superDomainsData, error: superDomainsError } = await supabase
         .from('super_domains')
@@ -358,9 +352,7 @@ const RoadmapBoard: React.FC = () => {
         .order('name');
 
       if (superDomainsError) throw superDomainsError;
-      console.log('✅ Super domains fetched:', superDomainsData);
 
-      console.log('📡 Fetching domains...');
       // Fetch domains
       const { data: domainsData, error: domainsError } = await supabase
         .from('domains')
@@ -368,9 +360,7 @@ const RoadmapBoard: React.FC = () => {
         .order('name');
 
       if (domainsError) throw domainsError;
-      console.log('✅ Domains fetched:', domainsData);
 
-      console.log('📡 Fetching sprints...');
       // Fetch sprints
       const { data: sprintsData, error: sprintsError } = await supabase
         .from('sprints')
@@ -378,9 +368,7 @@ const RoadmapBoard: React.FC = () => {
         .order('start_date');
 
       if (sprintsError) throw sprintsError;
-      console.log('✅ Sprints fetched:', sprintsData);
 
-      console.log('📡 Fetching roadmap items...');
       // Fetch roadmap items
       const { data: itemsData, error: itemsError } = await supabase
         .from('roadmap_items')
@@ -388,51 +376,23 @@ const RoadmapBoard: React.FC = () => {
         .order('created_at');
 
       if (itemsError) throw itemsError;
-      console.log('✅ Roadmap items fetched:', itemsData);
 
-      console.log('💾 Setting data in store...');
       setTeams(teamsData);
       setSuperDomains(superDomainsData);
       setDomains(domainsData);
       setSprints(sprintsData);
       setItems(itemsData);
-      
-      console.log('🎉 All data set successfully!');
-      console.log('Store state after setting data:', {
-        teams: teamsData?.length || 0,
-        superDomains: superDomainsData?.length || 0,
-        domains: domainsData?.length || 0,
-        sprints: sprintsData?.length || 0,
-        items: itemsData?.length || 0
-      });
     } catch (err) {
-      console.error('❌ Error fetching data:', err);
+      console.error('Error fetching data:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
     } finally {
-      console.log('🏁 Setting loading to false');
       setLoading(false);
     }
   }, [setItems, setTeams, setDomains, setSuperDomains, setSprints, setLoading, setError]);
 
   useEffect(() => {
-    console.log('🚀 RoadmapBoard component mounted, calling fetchData...');
     fetchData();
   }, [fetchData]);
-
-  // Debug logging for state changes
-  useEffect(() => {
-    console.log('📊 State updated:', {
-      itemsCount: items.length,
-      teamsCount: teams.length,
-      domainsCount: domains.length,
-      superDomainsCount: superDomains.length,
-      sprintsCount: sprints.length,
-      isLoading,
-      error,
-      filteredItemsCount: filteredItems.length,
-      groupedSprintsKeys: Object.keys(groupedSprints)
-    });
-  }, [items, teams, domains, superDomains, sprints, isLoading, error, filteredItems, groupedSprints]);
 
   // Handle drag start
   const handleDragStart = (event: DragStartEvent) => {
@@ -581,7 +541,6 @@ const RoadmapBoard: React.FC = () => {
   };
 
   if (isLoading) {
-    console.log('⏳ Rendering loading state...');
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-lg text-gray-600">Loading roadmap...</div>
@@ -590,7 +549,6 @@ const RoadmapBoard: React.FC = () => {
   }
 
   if (error) {
-    console.log('❌ Rendering error state:', error);
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="text-red-800">
@@ -607,54 +565,9 @@ const RoadmapBoard: React.FC = () => {
     );
   }
 
-  console.log('🎨 Rendering main component with data:', {
-    itemsCount: items.length,
-    teamsCount: teams.length,
-    domainsCount: domains.length,
-    superDomainsCount: superDomains.length,
-    sprintsCount: sprints.length,
-    filteredItemsCount: filteredItems.length,
-    groupedSprintsKeys: Object.keys(groupedSprints)
-  });
-
   try {
     return (
       <div className="h-full flex flex-col">
-        {/* Debug Info */}
-        <div className="bg-yellow-50 border border-yellow-200 p-4 mb-4">
-          <h3 className="font-medium text-yellow-800">Debug Info</h3>
-          <p className="text-sm text-yellow-700">
-            Items: {items.length} | Teams: {teams.length} | Domains: {domains.length} | 
-            Sprints: {sprints.length} | Loading: {isLoading.toString()} | Error: {error || 'none'}
-          </p>
-          <p className="text-sm text-yellow-700">
-            Filtered Items: {filteredItems.length} | Grouped Sprints: {Object.keys(groupedSprints).length}
-          </p>
-          <p className="text-sm text-yellow-700">
-            Backlog Items: {filteredItems.filter((item) => !item.sprint_id).length} | 
-            Sprint Items: {filteredItems.filter((item) => item.sprint_id).length}
-          </p>
-          <p className="text-sm text-yellow-700">
-            Grouped Sprints: {Object.keys(groupedSprints).join(', ')}
-          </p>
-          <p className="text-sm text-yellow-700">
-            Sprint Details: {Object.entries(groupedSprints).map(([quarter, sprints]) => 
-              `${quarter}: ${sprints.length} sprint(s) - ${sprints.map(s => s.name).join(', ')}`
-            ).join(' | ')}
-          </p>
-          <details className="mt-2">
-            <summary className="cursor-pointer text-yellow-700 font-medium">Raw Data</summary>
-            <div className="mt-2 text-xs bg-yellow-100 p-2 rounded">
-              <p><strong>Teams:</strong> {JSON.stringify(teams.map(t => ({ id: t.id, name: t.name })))}</p>
-              <p><strong>Domains:</strong> {JSON.stringify(domains.map(d => ({ id: d.id, name: d.name })))}</p>
-              <p><strong>Sprints:</strong> {JSON.stringify(sprints.map(s => ({ id: s.id, name: s.name })))}</p>
-              <p><strong>Items:</strong> {JSON.stringify(items.map(i => ({ id: i.id, title: i.title, sprint_id: i.sprint_id, team_id: i.team_id, domain_id: i.domain_id })))}</p>
-              <p><strong>Filtered Items:</strong> {JSON.stringify(filteredItems.map(i => ({ id: i.id, title: i.title, sprint_id: i.sprint_id, team_id: i.team_id, domain_id: i.domain_id })))}</p>
-              <p><strong>Grouped Sprints:</strong> {JSON.stringify(groupedSprints)}</p>
-            </div>
-          </details>
-        </div>
-
         {/* Filter Bar */}
         <FilterBar
           teams={teams}
@@ -896,7 +809,7 @@ const RoadmapBoard: React.FC = () => {
       </div>
     );
   } catch (renderError) {
-    console.error('❌ Error rendering RoadmapBoard:', renderError);
+    console.error('Error rendering RoadmapBoard:', renderError);
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="text-red-800">
