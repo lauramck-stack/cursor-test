@@ -167,20 +167,49 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
-      case 'planned': return 'bg-gray-100 text-gray-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'completed': return 'text-white';
+      case 'in-progress': return 'text-white';
+      case 'planned': return 'text-white';
+      case 'cancelled': return 'text-white';
+      default: return 'text-white';
     }
   };
 
   const getEffortColor = (effort: string) => {
     switch (effort) {
-      case 'large': return 'bg-purple-100 text-purple-800';
-      case 'medium': return 'bg-blue-100 text-blue-800';
-      case 'small': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'large': return 'text-white';
+      case 'medium': return 'text-white';
+      case 'small': return 'text-white';
+      default: return 'text-white';
+    }
+  };
+
+  const getPriorityBgColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'bg-red-600';
+      case 'critical': return 'bg-purple-600';
+      case 'medium': return 'bg-yellow-500';
+      case 'low': return 'bg-green-600';
+      default: return 'bg-gray-600';
+    }
+  };
+
+  const getStatusBgColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-[#1B3A29]'; // Dark green
+      case 'in-progress': return 'bg-[#77AA89]'; // Light green
+      case 'planned': return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
+      case 'cancelled': return 'bg-red-600';
+      default: return 'bg-gray-600';
+    }
+  };
+
+  const getEffortBgColor = (effort: string) => {
+    switch (effort) {
+      case 'large': return 'bg-[#1B3A29]'; // Dark green
+      case 'medium': return 'bg-[#77AA89]'; // Light green
+      case 'small': return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
+      default: return 'bg-gray-600';
     }
   };
 
@@ -231,12 +260,12 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleTitleCancel();
               }}
               onBlur={handleTitleSubmit}
-              className="flex-1 text-sm font-medium border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 text-sm font-medium border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             />
             <button
               onClick={handleTitleSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -270,12 +299,12 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleDescriptionCancel();
               }}
               onBlur={handleDescriptionSubmit}
-              className="flex-1 text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             />
             <button
               onClick={handleDescriptionSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -309,7 +338,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleWorkstreamCancel();
               }}
               onBlur={handleWorkstreamSubmit}
-              className="flex-1 text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             >
               {domains.map((d) => (
@@ -320,7 +349,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             </select>
             <button
               onClick={handleWorkstreamSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -354,7 +383,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handlePriorityCancel();
               }}
               onBlur={handlePrioritySubmit}
-              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             >
               <option value="high">High</option>
@@ -364,7 +393,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             </select>
             <button
               onClick={handlePrioritySubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -381,7 +410,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             onClick={() => setEditingPriority(true)}
             title="Click to change priority"
           >
-            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(item.priority)}`}>
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityBgColor(item.priority)} ${getPriorityColor(item.priority)}`}>
               {item.priority}
             </span>
           </div>
@@ -400,7 +429,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleEffortCancel();
               }}
               onBlur={handleEffortSubmit}
-              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             >
               <option value="large">Large</option>
@@ -409,7 +438,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             </select>
             <button
               onClick={handleEffortSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -426,7 +455,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             onClick={() => setEditingEffort(true)}
             title="Click to change effort"
           >
-            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getEffortColor(item.effort)}`}>
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getEffortBgColor(item.effort)} ${getEffortColor(item.effort)}`}>
               {item.effort || 'Medium'}
             </span>
           </div>
@@ -445,7 +474,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleStatusCancel();
               }}
               onBlur={handleStatusSubmit}
-              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             >
               <option value="completed">Completed</option>
@@ -455,7 +484,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             </select>
             <button
               onClick={handleStatusSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
@@ -472,7 +501,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
             onClick={() => setEditingStatus(true)}
             title="Click to change status"
           >
-            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBgColor(item.status)} ${getStatusColor(item.status)}`}>
               {item.status.replace('-', ' ')}
             </span>
           </div>
@@ -492,12 +521,12 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleDueDateCancel();
               }}
               onBlur={handleDueDateSubmit}
-              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
               autoFocus
             />
             <button
               onClick={handleDueDateSubmit}
-              className="text-blue-600 hover:text-blue-800 text-xs"
+              className="text-[#1B3A29] hover:text-[#77AA89] text-xs"
             >
               ✓
             </button>
