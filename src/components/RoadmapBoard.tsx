@@ -726,8 +726,35 @@ const RoadmapBoard: React.FC = () => {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
+            {/* Roadmap (Sprint Columns) */}
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 px-4">Roadmap</h2>
+              <div className="flex gap-4">
+                {/* Sprint Columns */}
+                {Object.entries(groupedSprints).map(([quarter, quarterSprints]) => (
+                  <div key={quarter} className="flex gap-4">
+                    {quarterSprints.map((sprint) => (
+                      <SprintColumn
+                        key={sprint.id}
+                        sprint={sprint}
+                        items={filteredItems.filter((item) => item.sprint_id === sprint.id)}
+                        teams={teams}
+                        domains={domains}
+                        editingItem={editingItem}
+                        onEditStart={setEditingItem}
+                        onEditEnd={() => setEditingItem(null)}
+                        onTitleEdit={handleTitleEdit}
+                        onWorkstreamEdit={handleWorkstreamEdit}
+                        onMoveToBacklog={handleMoveToBacklog}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Team Backlog Section */}
-            <div className="px-4 mb-6">
+            <div className="px-4">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Team Backlog</h2>
               <div className="flex gap-4 pb-2">
                 {teams.map((team) => {
@@ -763,29 +790,6 @@ const RoadmapBoard: React.FC = () => {
                   );
                 })}
               </div>
-            </div>
-
-            <div className="flex gap-4">
-              {/* Sprint Columns */}
-              {Object.entries(groupedSprints).map(([quarter, quarterSprints]) => (
-                <div key={quarter} className="flex gap-4">
-                  {quarterSprints.map((sprint) => (
-                    <SprintColumn
-                      key={sprint.id}
-                      sprint={sprint}
-                      items={filteredItems.filter((item) => item.sprint_id === sprint.id)}
-                      teams={teams}
-                      domains={domains}
-                      editingItem={editingItem}
-                      onEditStart={setEditingItem}
-                      onEditEnd={() => setEditingItem(null)}
-                      onTitleEdit={handleTitleEdit}
-                      onWorkstreamEdit={handleWorkstreamEdit}
-                      onMoveToBacklog={handleMoveToBacklog}
-                    />
-                  ))}
-                </div>
-              ))}
             </div>
 
             {/* Drag Overlay */}

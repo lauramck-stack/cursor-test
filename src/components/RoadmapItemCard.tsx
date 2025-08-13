@@ -114,11 +114,16 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
       {/* Team and Domain Tags */}
       <div className="flex items-center gap-2 mb-2">
         {team && (
-          <span
-            className="inline-block w-3 h-3 rounded-full"
-            style={{ backgroundColor: team.color || '#6B7280' }}
-            title={team.name}
-          />
+          <div className="flex items-center gap-1">
+            <span
+              className="inline-block w-3 h-3 rounded-full"
+              style={{ backgroundColor: team.color || '#6B7280' }}
+              title={team.name}
+            />
+            <span className="text-xs text-gray-700 font-medium">
+              {team.name}
+            </span>
+          </div>
         )}
         {domain && (
           <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
