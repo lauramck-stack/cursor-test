@@ -14,6 +14,11 @@ interface SprintColumnProps {
   onEditEnd: () => void;
   onTitleEdit: (itemId: string, newTitle: string) => void;
   onWorkstreamEdit: (itemId: string, newDomainId: string) => void;
+  onDescriptionEdit: (itemId: string, newDescription: string) => void;
+  onPriorityEdit: (itemId: string, newPriority: string) => void;
+  onEffortEdit: (itemId: string, newEffort: string) => void;
+  onStatusEdit: (itemId: string, newStatus: string) => void;
+  onDueDateEdit: (itemId: string, newDueDate: string) => void;
   onMoveToBacklog: (itemId: string) => void;
 }
 
@@ -27,6 +32,11 @@ export const SprintColumn: React.FC<SprintColumnProps> = ({
   onEditEnd,
   onTitleEdit,
   onWorkstreamEdit,
+  onDescriptionEdit,
+  onPriorityEdit,
+  onEffortEdit,
+  onStatusEdit,
+  onDueDateEdit,
   onMoveToBacklog,
 }) => {
   const { setNodeRef } = useDroppable({
@@ -90,6 +100,11 @@ export const SprintColumn: React.FC<SprintColumnProps> = ({
                 onEditEnd={onEditEnd}
                 onTitleEdit={onTitleEdit}
                 onWorkstreamEdit={onWorkstreamEdit}
+                onDescriptionEdit={onDescriptionEdit}
+                onPriorityEdit={onPriorityEdit}
+                onEffortEdit={onEffortEdit}
+                onStatusEdit={onStatusEdit}
+                onDueDateEdit={onDueDateEdit}
                 onMoveToBacklog={onMoveToBacklog}
               />
             ))}

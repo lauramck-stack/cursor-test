@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent, PointerSensor, useSensor, useSensors, useDraggable } from '@dnd-kit/core';
+import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { create } from 'zustand';
 import { RoadmapItemCard } from './RoadmapItemCard';
 import { SprintColumn } from './SprintColumn';
@@ -50,7 +50,7 @@ export interface RoadmapItem {
   status: string;
   priority: string;
   effort: string;
-  due_date?: string;
+  due_date?: string | null;
   team_id: string;
   domain_id: string;
   sprint_id?: string | null;
@@ -65,54 +65,54 @@ export interface FilterState {
 }
 
 // Draggable Backlog Item Component
-const DraggableBacklogItem: React.FC<{ item: RoadmapItem }> = ({ item }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: item.id,
-  });
+// const DraggableBacklogItem: React.FC<{ item: RoadmapItem }> = ({ item }) => {
+//   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+//     id: item.id,
+//   });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+//   const style = transform ? {
+//     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+//   } : undefined;
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className={`bg-white border border-gray-200 rounded-md p-3 cursor-move hover:shadow-sm transition-shadow ${isDragging ? 'opacity-50' : ''}`}
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-gray-800 text-sm truncate">
-            {item.title}
-          </h4>
-          {item.description && (
-            <p className="text-xs text-gray-600 mt-1 truncate">
-              {item.description}
-            </p>
-          )}
-          <div className="flex items-center gap-2 mt-2">
-            <span className={`text-xs px-2 py-1 rounded ${
-              item.priority === 'high' ? 'bg-red-100 text-red-800' :
-              item.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-green-100 text-green-800'
-            }`}>
-              {item.priority}
-            </span>
-            <span className={`text-xs px-2 py-1 rounded ${
-              item.effort === 'large' ? 'bg-purple-100 text-purple-800' :
-              item.effort === 'medium' ? 'bg-blue-100 text-blue-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {item.effort}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div
+//       ref={setNodeRef}
+//       style={style}
+//       {...listeners}
+//       {...attributes}
+//       className={`bg-white border border-gray-200 rounded-md p-3 cursor-move hover:shadow-sm transition-shadow ${isDragging ? 'opacity-50' : ''}`}
+//     >
+//       <div className="flex items-start justify-between">
+//         <div className="flex-1 min-w-0">
+//           <h4 className="font-medium text-gray-800 text-sm truncate">
+//             {item.title}
+//           </h4>
+//           {item.description && (
+//             <p className="text-xs text-gray-600 mt-1 truncate">
+//               {item.description}
+//             </p>
+//           )}
+//           <div className="flex items-center gap-2 mt-2">
+//             <span className={`text-xs px-2 py-1 rounded ${
+//               item.priority === 'high' ? 'bg-red-100 text-red-800' :
+//               item.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+//               'bg-green-100 text-green-800'
+//             }`}>
+//               {item.priority}
+//             </span>
+//             <span className={`text-xs px-2 py-1 rounded ${
+//               item.priority === 'large' ? 'bg-purple-100 text-purple-800' :
+//               item.priority === 'medium' ? 'bg-blue-100 text-blue-800' :
+//               'bg-gray-100 text-gray-800'
+//             }`}>
+//               {item.effort}
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 // Zustand store for optimistic updates
 interface RoadmapStore {
@@ -137,6 +137,11 @@ interface RoadmapStore {
   updateItemSprint: (itemId: string, newSprintId: string | null) => void;
   updateItemTitle: (itemId: string, newTitle: string) => void;
   updateItemWorkstream: (itemId: string, newDomainId: string) => void;
+  updateItemDescription: (itemId: string, newDescription: string) => void;
+  updateItemPriority: (itemId: string, newPriority: string) => void;
+  updateItemEffort: (itemId: string, newEffort: string) => void;
+  updateItemStatus: (itemId: string, newStatus: string) => void;
+  updateItemDueDate: (itemId: string, newDueDate: string | null) => void;
   setFilters: (filters: Partial<RoadmapStore['filters']>) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -182,6 +187,41 @@ export const useRoadmapStore = create<RoadmapStore>((set, get) => ({
     set((state) => ({
       items: state.items.map((item) =>
         item.id === itemId ? { ...item, domain_id: newDomainId } : item
+      ),
+    }));
+  },
+  updateItemDescription: (itemId, newDescription) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId ? { ...item, description: newDescription } : item
+      ),
+    }));
+  },
+  updateItemPriority: (itemId, newPriority) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId ? { ...item, priority: newPriority } : item
+      ),
+    }));
+  },
+  updateItemEffort: (itemId, newEffort) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId ? { ...item, effort: newEffort } : item
+      ),
+    }));
+  },
+  updateItemStatus: (itemId, newStatus) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId ? { ...item, status: newStatus } : item
+      ),
+    }));
+  },
+  updateItemDueDate: (itemId, newDueDate) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId ? { ...item, due_date: newDueDate } : item
       ),
     }));
   },
@@ -481,6 +521,121 @@ const RoadmapBoard: React.FC = () => {
     }
   };
 
+  const handleDescriptionEdit = async (itemId: string, newDescription: string) => {
+    // Optimistic update
+    useRoadmapStore.getState().updateItemDescription(itemId, newDescription);
+
+    try {
+      const { error } = await supabase
+        .from('roadmap_items')
+        .update({ description: newDescription })
+        .eq('id', itemId);
+
+      if (error) {
+        // Revert optimistic update on error
+        const originalItem = items.find((i) => i.id === itemId);
+        if (originalItem) {
+          useRoadmapStore.getState().updateItemDescription(itemId, originalItem.description);
+        }
+        throw error;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update description');
+    }
+  };
+
+  const handlePriorityEdit = async (itemId: string, newPriority: string) => {
+    // Optimistic update
+    useRoadmapStore.getState().updateItemPriority(itemId, newPriority);
+
+    try {
+      const { error } = await supabase
+        .from('roadmap_items')
+        .update({ priority: newPriority })
+        .eq('id', itemId);
+
+      if (error) {
+        // Revert optimistic update on error
+        const originalItem = items.find((i) => i.id === itemId);
+        if (originalItem) {
+          useRoadmapStore.getState().updateItemPriority(itemId, originalItem.priority);
+        }
+        throw error;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update priority');
+    }
+  };
+
+  const handleEffortEdit = async (itemId: string, newEffort: string) => {
+    // Optimistic update
+    useRoadmapStore.getState().updateItemEffort(itemId, newEffort);
+
+    try {
+      const { error } = await supabase
+        .from('roadmap_items')
+        .update({ effort: newEffort })
+        .eq('id', itemId);
+
+      if (error) {
+        // Revert optimistic update on error
+        const originalItem = items.find((i) => i.id === itemId);
+        if (originalItem) {
+          useRoadmapStore.getState().updateItemEffort(itemId, originalItem.effort);
+        }
+        throw error;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update effort');
+    }
+  };
+
+  const handleStatusEdit = async (itemId: string, newStatus: string) => {
+    // Optimistic update
+    useRoadmapStore.getState().updateItemStatus(itemId, newStatus);
+
+    try {
+      const { error } = await supabase
+        .from('roadmap_items')
+        .update({ status: newStatus })
+        .eq('id', itemId);
+
+      if (error) {
+        // Revert optimistic update on error
+        const originalItem = items.find((i) => i.id === itemId);
+        if (originalItem) {
+          useRoadmapStore.getState().updateItemStatus(itemId, originalItem.status);
+        }
+        throw error;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update status');
+    }
+  };
+
+  const handleDueDateEdit = async (itemId: string, newDueDate: string) => {
+    // Optimistic update
+    useRoadmapStore.getState().updateItemDueDate(itemId, newDueDate);
+
+    try {
+      const { error } = await supabase
+        .from('roadmap_items')
+        .update({ due_date: newDueDate || null })
+        .eq('id', itemId);
+
+      if (error) {
+        // Revert optimistic update on error
+        const originalItem = items.find((i) => i.id === itemId);
+        if (originalItem) {
+          useRoadmapStore.getState().updateItemDueDate(itemId, originalItem.due_date || null);
+        }
+        throw error;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update due date');
+    }
+  };
+
   const handleAddItem = async () => {
     if (!newItem.title.trim()) return;
 
@@ -745,6 +900,11 @@ const RoadmapBoard: React.FC = () => {
                         onEditEnd={() => setEditingItem(null)}
                         onTitleEdit={handleTitleEdit}
                         onWorkstreamEdit={handleWorkstreamEdit}
+                        onDescriptionEdit={handleDescriptionEdit}
+                        onPriorityEdit={handlePriorityEdit}
+                        onEffortEdit={handleEffortEdit}
+                        onStatusEdit={handleStatusEdit}
+                        onDueDateEdit={handleDueDateEdit}
                         onMoveToBacklog={handleMoveToBacklog}
                       />
                     ))}
@@ -778,7 +938,23 @@ const RoadmapBoard: React.FC = () => {
                       <div className="space-y-2">
                         {teamBacklogItems.length > 0 ? (
                           teamBacklogItems.map((item) => (
-                            <DraggableBacklogItem key={item.id} item={item} />
+                            <RoadmapItemCard
+                              key={item.id}
+                              item={item}
+                              team={teams.find((t) => t.id === item.team_id)}
+                              domain={domains.find((d) => d.id === item.domain_id)}
+                              domains={domains}
+                              isEditing={editingItem === item.id}
+                              onEditStart={() => setEditingItem(item.id)}
+                              onEditEnd={() => setEditingItem(null)}
+                              onTitleEdit={handleTitleEdit}
+                              onWorkstreamEdit={handleWorkstreamEdit}
+                              onDescriptionEdit={handleDescriptionEdit}
+                              onPriorityEdit={handlePriorityEdit}
+                              onEffortEdit={handleEffortEdit}
+                              onStatusEdit={handleStatusEdit}
+                              onDueDateEdit={handleDueDateEdit}
+                            />
                           ))
                         ) : (
                           <div className="text-center text-gray-500 text-sm py-8">
@@ -805,6 +981,11 @@ const RoadmapBoard: React.FC = () => {
                   onEditEnd={() => {}}
                   onTitleEdit={() => {}}
                   onWorkstreamEdit={() => {}}
+                  onDescriptionEdit={() => {}}
+                  onPriorityEdit={() => {}}
+                  onEffortEdit={() => {}}
+                  onStatusEdit={() => {}}
+                  onDueDateEdit={() => {}}
                 />
               )}
             </DragOverlay>

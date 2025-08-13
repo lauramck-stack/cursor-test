@@ -14,6 +14,11 @@ interface RoadmapItemCardProps {
   onEditEnd: () => void;
   onTitleEdit: (itemId: string, newTitle: string) => void;
   onWorkstreamEdit: (itemId: string, newDomainId: string) => void;
+  onDescriptionEdit: (itemId: string, newDescription: string) => void;
+  onPriorityEdit: (itemId: string, newPriority: string) => void;
+  onEffortEdit: (itemId: string, newEffort: string) => void;
+  onStatusEdit: (itemId: string, newStatus: string) => void;
+  onDueDateEdit: (itemId: string, newDueDate: string) => void;
   onMoveToBacklog?: (itemId: string) => void;
 }
 
@@ -26,12 +31,28 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
   isDragging,
   onTitleEdit,
   onWorkstreamEdit,
+  onDescriptionEdit,
+  onPriorityEdit,
+  onEffortEdit,
+  onStatusEdit,
+  onDueDateEdit,
   onMoveToBacklog,
 }) => {
   const [editingTitle, setEditingTitle] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
   const [editingWorkstream, setEditingWorkstream] = useState(false);
+  const [editingPriority, setEditingPriority] = useState(false);
+  const [editingEffort, setEditingEffort] = useState(false);
+  const [editingStatus, setEditingStatus] = useState(false);
+  const [editingDueDate, setEditingDueDate] = useState(false);
+  
   const [titleValue, setTitleValue] = useState(item.title);
+  const [descriptionValue, setDescriptionValue] = useState(item.description || '');
   const [workstreamValue, setWorkstreamValue] = useState(item.domain_id);
+  const [priorityValue, setPriorityValue] = useState(item.priority);
+  const [effortValue, setEffortValue] = useState(item.effort || 'medium');
+  const [statusValue, setStatusValue] = useState(item.status);
+  const [dueDateValue, setDueDateValue] = useState(item.due_date || '');
 
   const {
     attributes,
@@ -42,10 +63,6 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
     isDragging: isSortableDragging,
   } = useSortable({
     id: item.id,
-    data: {
-      type: 'roadmap-item',
-      item,
-    },
   });
 
   const style = {
@@ -66,6 +83,18 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
     setEditingTitle(false);
   };
 
+  const handleDescriptionSubmit = () => {
+    if (descriptionValue !== item.description) {
+      onDescriptionEdit(item.id, descriptionValue);
+    }
+    setEditingDescription(false);
+  };
+
+  const handleDescriptionCancel = () => {
+    setDescriptionValue(item.description || '');
+    setEditingDescription(false);
+  };
+
   const handleWorkstreamSubmit = () => {
     if (workstreamValue !== item.domain_id) {
       onWorkstreamEdit(item.id, workstreamValue);
@@ -76,6 +105,54 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
   const handleWorkstreamCancel = () => {
     setWorkstreamValue(item.domain_id);
     setEditingWorkstream(false);
+  };
+
+  const handlePrioritySubmit = () => {
+    if (priorityValue !== item.priority) {
+      onPriorityEdit(item.id, priorityValue);
+    }
+    setEditingPriority(false);
+  };
+
+  const handlePriorityCancel = () => {
+    setPriorityValue(item.priority);
+    setEditingPriority(false);
+  };
+
+  const handleEffortSubmit = () => {
+    if (effortValue !== item.effort) {
+      onEffortEdit(item.id, effortValue);
+    }
+    setEditingEffort(false);
+  };
+
+  const handleEffortCancel = () => {
+    setEffortValue(item.effort || 'medium');
+    setEditingEffort(false);
+  };
+
+  const handleStatusSubmit = () => {
+    if (statusValue !== item.status) {
+      onStatusEdit(item.id, statusValue);
+    }
+    setEditingStatus(false);
+  };
+
+  const handleStatusCancel = () => {
+    setStatusValue(item.status);
+    setEditingStatus(false);
+  };
+
+  const handleDueDateSubmit = () => {
+    if (dueDateValue !== item.due_date) {
+      onDueDateEdit(item.id, dueDateValue);
+    }
+    setEditingDueDate(false);
+  };
+
+  const handleDueDateCancel = () => {
+    setDueDateValue(item.due_date || '');
+    setEditingDueDate(false);
   };
 
   const getPriorityColor = (priority: string) => {
@@ -94,6 +171,15 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
       case 'in-progress': return 'bg-blue-100 text-blue-800';
       case 'planned': return 'bg-gray-100 text-gray-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getEffortColor = (effort: string) => {
+    switch (effort) {
+      case 'large': return 'bg-purple-100 text-purple-800';
+      case 'medium': return 'bg-blue-100 text-blue-800';
+      case 'small': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -173,11 +259,43 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
       </div>
 
       {/* Description */}
-      {item.description && (
-        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-          {item.description}
-        </p>
-      )}
+      <div className="mb-2">
+        {editingDescription ? (
+          <div className="flex gap-1">
+            <textarea
+              value={descriptionValue}
+              onChange={(e) => setDescriptionValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleDescriptionSubmit();
+                if (e.key === 'Escape') handleDescriptionCancel();
+              }}
+              onBlur={handleDescriptionSubmit}
+              className="flex-1 text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            />
+            <button
+              onClick={handleDescriptionSubmit}
+              className="text-blue-600 hover:text-blue-800 text-xs"
+            >
+              ✓
+            </button>
+            <button
+              onClick={handleDescriptionCancel}
+              className="text-gray-600 hover:text-gray-800 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div
+            className="text-xs text-gray-600 cursor-pointer hover:bg-gray-50 px-1 py-1 rounded -ml-1"
+            onClick={() => setEditingDescription(true)}
+            title="Click to edit"
+          >
+            {item.description || 'Add a description...'}
+          </div>
+        )}
+      </div>
 
       {/* Workstream Selection */}
       <div className="mb-2">
@@ -224,18 +342,180 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
         )}
       </div>
 
-      {/* Status and Priority Badges */}
-      <div className="flex items-center gap-2">
-        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
-          {item.status.replace('-', ' ')}
-        </span>
-        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(item.priority)}`}>
-          {item.priority}
-        </span>
-        {item.effort && (
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-            {item.effort}
-          </span>
+      {/* Priority Badge */}
+      <div className="mb-2">
+        {editingPriority ? (
+          <div className="flex gap-1">
+            <select
+              value={priorityValue}
+              onChange={(e) => setPriorityValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handlePrioritySubmit();
+                if (e.key === 'Escape') handlePriorityCancel();
+              }}
+              onBlur={handlePrioritySubmit}
+              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            >
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+            <button
+              onClick={handlePrioritySubmit}
+              className="text-blue-600 hover:text-blue-800 text-xs"
+            >
+              ✓
+            </button>
+            <button
+              onClick={handlePriorityCancel}
+              className="text-gray-600 hover:text-gray-800 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div
+            className="text-xs text-gray-500 cursor-pointer hover:bg-gray-50 px-1 py-1 rounded -ml-1"
+            onClick={() => setEditingPriority(true)}
+            title="Click to change priority"
+          >
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getPriorityColor(item.priority)}`}>
+              {item.priority}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Effort Badge */}
+      <div className="mb-2">
+        {editingEffort ? (
+          <div className="flex gap-1">
+            <select
+              value={effortValue}
+              onChange={(e) => setEffortValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleEffortSubmit();
+                if (e.key === 'Escape') handleEffortCancel();
+              }}
+              onBlur={handleEffortSubmit}
+              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            >
+              <option value="large">Large</option>
+              <option value="medium">Medium</option>
+              <option value="small">Small</option>
+            </select>
+            <button
+              onClick={handleEffortSubmit}
+              className="text-blue-600 hover:text-blue-800 text-xs"
+            >
+              ✓
+            </button>
+            <button
+              onClick={handleEffortCancel}
+              className="text-gray-600 hover:text-gray-800 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div
+            className="text-xs text-gray-500 cursor-pointer hover:bg-gray-50 px-1 py-1 rounded -ml-1"
+            onClick={() => setEditingEffort(true)}
+            title="Click to change effort"
+          >
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getEffortColor(item.effort)}`}>
+              {item.effort || 'Medium'}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Status Badge */}
+      <div className="mb-2">
+        {editingStatus ? (
+          <div className="flex gap-1">
+            <select
+              value={statusValue}
+              onChange={(e) => setStatusValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleStatusSubmit();
+                if (e.key === 'Escape') handleStatusCancel();
+              }}
+              onBlur={handleStatusSubmit}
+              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            >
+              <option value="completed">Completed</option>
+              <option value="in-progress">In Progress</option>
+              <option value="planned">Planned</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <button
+              onClick={handleStatusSubmit}
+              className="text-blue-600 hover:text-blue-800 text-xs"
+            >
+              ✓
+            </button>
+            <button
+              onClick={handleStatusCancel}
+              className="text-gray-600 hover:text-gray-800 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div
+            className="text-xs text-gray-500 cursor-pointer hover:bg-gray-50 px-1 py-1 rounded -ml-1"
+            onClick={() => setEditingStatus(true)}
+            title="Click to change status"
+          >
+            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(item.status)}`}>
+              {item.status.replace('-', ' ')}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Due Date */}
+      <div className="mb-2">
+        {editingDueDate ? (
+          <div className="flex gap-1">
+            <input
+              type="date"
+              value={dueDateValue}
+              onChange={(e) => setDueDateValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleDueDateSubmit();
+                if (e.key === 'Escape') handleDueDateCancel();
+              }}
+              onBlur={handleDueDateSubmit}
+              className="text-xs border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            />
+            <button
+              onClick={handleDueDateSubmit}
+              className="text-blue-600 hover:text-blue-800 text-xs"
+            >
+              ✓
+            </button>
+            <button
+              onClick={handleDueDateCancel}
+              className="text-gray-600 hover:text-gray-800 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div
+            className="text-xs text-gray-500 cursor-pointer hover:bg-gray-50 px-1 py-1 rounded -ml-1"
+            onClick={() => setEditingDueDate(true)}
+            title="Click to set due date"
+          >
+            {item.due_date ? new Date(item.due_date).toLocaleDateString() : 'No due date'}
+          </div>
         )}
       </div>
 
@@ -249,13 +529,6 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
           >
             ← Move to Backlog
           </button>
-        </div>
-      )}
-
-      {/* Due Date */}
-      {item.due_date && (
-        <div className="mt-2 text-xs text-gray-500">
-          Due: {new Date(item.due_date).toLocaleDateString()}
         </div>
       )}
     </div>
