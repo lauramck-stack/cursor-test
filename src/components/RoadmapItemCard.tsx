@@ -196,9 +196,9 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
 
   const getStatusBgColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-[#1B3A29]'; // Dark green
-      case 'in-progress': return 'bg-[#77AA89]'; // Light green
-      case 'planned': return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
+      case 'completed': return 'bg-brand-dark-green'; // Dark green
+      case 'in-progress': return 'bg-brand-light-green'; // Light green
+      case 'planned': return 'bg-brand-light-blue text-brand-dark-green'; // Light blue with dark green text
       case 'cancelled': return 'bg-red-600';
       default: return 'bg-gray-600';
     }
@@ -206,9 +206,9 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
 
   const getEffortBgColor = (effort: string) => {
     switch (effort) {
-      case 'large': return 'bg-[#1B3A29]'; // Dark green
-      case 'medium': return 'bg-[#77AA89]'; // Light green
-      case 'small': return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
+      case 'large': return 'bg-brand-dark-green'; // Dark green
+      case 'medium': return 'bg-brand-light-green'; // Light green
+      case 'small': return 'bg-brand-light-blue text-brand-dark-green'; // Light blue with dark green text
       default: return 'bg-gray-600';
     }
   };
@@ -260,7 +260,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleTitleCancel();
               }}
               onBlur={handleTitleSubmit}
-              className="flex-1 text-sm font-medium border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="flex-1 text-sm font-medium border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             />
             <button
@@ -299,7 +299,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleDescriptionCancel();
               }}
               onBlur={handleDescriptionSubmit}
-              className="flex-1 text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="flex-1 text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             />
             <button
@@ -338,7 +338,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleWorkstreamCancel();
               }}
               onBlur={handleWorkstreamSubmit}
-              className="flex-1 text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="flex-1 text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             >
               {domains.map((d) => (
@@ -383,7 +383,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handlePriorityCancel();
               }}
               onBlur={handlePrioritySubmit}
-              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             >
               <option value="high">High</option>
@@ -429,7 +429,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleEffortCancel();
               }}
               onBlur={handleEffortSubmit}
-              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             >
               <option value="large">Large</option>
@@ -474,7 +474,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleStatusCancel();
               }}
               onBlur={handleStatusSubmit}
-              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             >
               <option value="completed">Completed</option>
@@ -521,7 +521,7 @@ export const RoadmapItemCard: React.FC<RoadmapItemCardProps> = ({
                 if (e.key === 'Escape') handleDueDateCancel();
               }}
               onBlur={handleDueDateSubmit}
-              className="text-xs border border-[#77AA89] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+              className="text-xs border border-brand-light-green rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-light-green"
               autoFocus
             />
             <button

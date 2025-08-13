@@ -736,7 +736,7 @@ const RoadmapBoard: React.FC = () => {
         <div className="px-4 mb-4">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="bg-[#1B3A29] text-white px-4 py-2 rounded-lg hover:bg-[#77AA89] transition-colors"
+            className="bg-brand-dark-green text-white px-4 py-2 rounded-lg hover:bg-brand-light-green transition-colors"
           >
             {showAddForm ? 'Cancel' : '+ Add New Item'}
           </button>
@@ -753,7 +753,7 @@ const RoadmapBoard: React.FC = () => {
                   type="text"
                   value={newItem.title}
                   onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                   placeholder="Enter item title"
                 />
               </div>
@@ -763,7 +763,7 @@ const RoadmapBoard: React.FC = () => {
                   type="text"
                   value={newItem.description}
                   onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                   placeholder="Enter description"
                 />
               </div>
@@ -772,7 +772,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.team_id}
                   onChange={(e) => setNewItem({ ...newItem, team_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="">Select Team</option>
                   {teams.map((team) => (
@@ -787,7 +787,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.domain_id}
                   onChange={(e) => setNewItem({ ...newItem, domain_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="">Select Domain</option>
                   {domains.map((domain) => (
@@ -802,7 +802,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.sprint_id}
                   onChange={(e) => setNewItem({ ...newItem, sprint_id: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="">Backlog (No Sprint)</option>
                   {sprints.map((sprint) => (
@@ -817,7 +817,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.priority}
                   onChange={(e) => setNewItem({ ...newItem, priority: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -829,7 +829,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.effort}
                   onChange={(e) => setNewItem({ ...newItem, effort: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="small">Small</option>
                   <option value="medium">Medium</option>
@@ -841,7 +841,7 @@ const RoadmapBoard: React.FC = () => {
                 <select
                   value={newItem.status}
                   onChange={(e) => setNewItem({ ...newItem, status: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#77AA89]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-light-green"
                 >
                   <option value="planned">Planned</option>
                   <option value="in_progress">In Progress</option>

@@ -64,7 +64,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           >
             <span>Filters</span>
             {getActiveFilterCount() > 0 && (
-              <span className="bg-[#F5C143] text-[#1B3A29] text-xs px-2 py-1 rounded-full">
+              <span className="bg-brand-yellow text-brand-dark-green text-xs px-2 py-1 rounded-full">
                 {getActiveFilterCount()}
               </span>
             )}
@@ -109,7 +109,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       type="checkbox"
                       checked={filters.teams.includes(team.id)}
                       onChange={() => handleTeamToggle(team.id)}
-                      className="rounded border-gray-300 text-[#1B3A29] focus:ring-[#77AA89]"
+                      className="rounded border-gray-300 text-brand-dark-green focus:ring-brand-light-green"
                     />
                     <div className="flex items-center gap-2">
                       <span
@@ -133,7 +133,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       type="checkbox"
                       checked={filters.superDomains.includes(superDomain.id)}
                       onChange={() => handleSuperDomainToggle(superDomain.id)}
-                      className="rounded border-gray-300 text-[#1B3A29] focus:ring-[#77AA89]"
+                      className="rounded border-gray-300 text-brand-dark-green focus:ring-brand-light-green"
                     />
                     <div className="flex items-center gap-2">
                       <span
@@ -159,7 +159,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                         type="checkbox"
                         checked={filters.domains.includes(domain.id)}
                         onChange={() => handleDomainToggle(domain.id)}
-                        className="rounded border-gray-300 text-[#1B3A29] focus:ring-[#77AA89]"
+                        className="rounded border-gray-300 text-brand-dark-green focus:ring-brand-light-green"
                       />
                       <div className="flex items-center gap-2">
                         <span

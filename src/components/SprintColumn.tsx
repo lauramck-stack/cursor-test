@@ -56,10 +56,10 @@ export const SprintColumn: React.FC<SprintColumnProps> = ({
 
   const getSprintStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-[#1B3A29] text-white'; // Dark green
-      case 'in-progress': return 'bg-[#77AA89] text-white'; // Light green
-      case 'planned': return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
-      default: return 'bg-[#CBE3E1] text-[#1B3A29]'; // Light blue with dark green text
+      case 'completed': return 'bg-brand-dark-green text-white'; // Dark green
+      case 'in-progress': return 'bg-brand-light-green text-white'; // Light green
+      case 'planned': return 'bg-brand-light-blue text-brand-dark-green'; // Light blue with dark green text
+      default: return 'bg-brand-light-blue text-brand-dark-green'; // Light blue with dark green text
     }
   };
 

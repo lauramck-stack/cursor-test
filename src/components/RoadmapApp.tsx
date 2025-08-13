@@ -65,8 +65,8 @@ const RoadmapApp: React.FC = () => {
           {/* Progress Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-[#1B3A29]">{items.length}</div>
-              <div className="text-sm text-[#1B3A29]">Total Items</div>
+              <div className="text-2xl font-bold text-brand-dark-green">{items.length}</div>
+              <div className="text-sm text-brand-dark-green">Total Items</div>
             </div>
             <div className="bg-green-50 p-4 rounded-lg">
               <div className="text-2xl font-bold text-green-600">
@@ -75,10 +75,10 @@ const RoadmapApp: React.FC = () => {
               <div className="text-sm text-green-600">Completed</div>
             </div>
             <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="text-2xl font-bold text-[#77AA89]">
+              <div className="text-2xl font-bold text-brand-light-green">
                 {items.filter(item => item.status === 'in-progress').length}
               </div>
-              <div className="text-sm text-[#77AA89]">In Progress</div>
+              <div className="text-sm text-brand-light-green">In Progress</div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg">
               <div className="text-2xl font-bold text-gray-600">
